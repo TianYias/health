@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tian.dao.CheckItemDao">
+    <!--插入检查项-->
+    <insert id="add" parameterType="com.tian.pojo.CheckItem">
+        insert into t_checkitem (`code`, `name`, `sex`, `age`, `price`, `type`, `attention`, `remark`)
+        values (#{code}, #{name}, #{sex}, #{age}, #{price}, #{type}, #{attention}, #{remark})
+    </insert>
+
+    <!--按条件查询-->
+    <select id="selectByCondition" parameterType="string" resultType="com.tian.pojo.CheckItem">
+        select * from t_checkitem
+        <if test="value != null and value.length > 0">
+            where `code` = #{value} or `name` = #{value}
+        </if>
+    </select>
+
+    <!--根据检查项id查询与检查组关联的有几条-->
+    <select id="findCountById" parameterType="int" resultType="int">
+        select count(*)
+        from t_checkgroup_checkitem
+        where `checkitem_id` = #{id}
+    </select>
+
+    <!--删除检查项-->
+    <delete id="deleteById" parameterType="int">
+        delete
+        from t_checkitem
+        where `id` = #{id}
+    </delete>
+
+    <!--修改检查项-->
+    <update id="edit" parameterType="com.tian.pojo.CheckItem">
+        update t_checkitem
+        set `code`= #{code},
+            `name`= #{name},
+            `sex`= #{sex},
+            `age`= #{age},
+            `price`= #{price},
+            `type`= #{type},
+            `attention`= #{attention},
+            `remark`= #{remark}
+        where `id` = #{id}
+    </update>
+
+    <!--查询所有检查项-->
+    <select id="findAll" resultType="com.tian.pojo.CheckItem">
+        select * from t_checkitem
+    </select>
+</mapper>

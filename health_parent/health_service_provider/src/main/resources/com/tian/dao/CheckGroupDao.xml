@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tian.dao.CheckGroupDao">
+    <!--插入检查项-->
+    <insert id="add" parameterType="com.tian.pojo.CheckItem">
+        <selectKey resultType="int" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into t_checkgroup (`code`, `name`, `helpCode`, `sex`, `remark`, `attention`)
+        values (#{code}, #{name}, #{helpCode}, #{sex}, #{remark}, #{attention})
+    </insert>
+
+    <!--插入检查项与检查组的关系-->
+    <insert id="setCheckGroupAndCheckItem" parameterType="java.util.Map">
+        insert into t_checkgroup_checkitem(`checkgroup_id`, `checkitem_id`)
+        values (#{checkgroup_id}, #{checkitem_id})
+    </insert>
+
+    <!--根据检查组id删除关系-->
+    <delete id="deleteCheckGroupAndCheckItemById" parameterType="int">
+        delete
+        from t_checkgroup_checkitem
+        where checkgroup_id = #{id}
+    </delete>
+
+    <!--分页查询-->
+    <select id="findPage" parameterType="string" resultType="com.tian.pojo.CheckGroup">
+        select * from t_checkgroup
+        <if test="value != null and value.length > 0">
+            where `code` = #{value} or `name` = #{value} or `helpCode` = #{value}
+        </if>
+    </select>
+
+    <!--查询检查组包含的检查项-->
+    <select id="findCheckItemIdsByCheckGroupId" parameterType="int" resultType="int">
+        select checkitem_id
+        from t_checkgroup_checkitem
+        where checkgroup_id = #{id}
+    </select>
+
+    <!--修改检查组-->
+    <update id="edit" parameterType="com.tian.pojo.CheckGroup">
+        update t_checkgroup
+        set `code`      = #{code},
+            `name`      = #{name},
+            `helpCode`  = #{helpCode},
+            `sex`       = #{sex},
+            `remark`    = #{remark},
+            `attention` = #{attention}
+        where `id` = #{id}
+    </update>
+
+    <!--删除检查组-->
+    <delete id="delete" parameterType="int">
+        delete
+        from t_checkgroup
+        where id = #{id}
+    </delete>
+
+    <!--查询所有检查组-->
+    <select id="findAll" resultType="com.tian.pojo.CheckGroup">
+        select * from t_checkgroup
+    </select>
+</mapper>
