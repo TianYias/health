@@ -63,6 +63,7 @@ public class SetmealController {
         return new Result(true, MessageConstant.ADD_SETMEAL_SUCCESS);
     }
 
+    //分页查询
     @RequestMapping("/findPage")
     public PageResult findPage(@RequestBody QueryPageBean queryPageBean) {
         return setmealService.findPage(queryPageBean.getCurrentPage(),queryPageBean.getPageSize(),queryPageBean.getQueryString());
