@@ -3,12 +3,14 @@ package com.tian.service.impl;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.tian.constant.RedisConstant;
 import com.tian.dao.SetmealDao;
 import com.tian.entity.PageResult;
 import com.tian.pojo.Setmeal;
 import com.tian.service.SetmealService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import redis.clients.jedis.JedisPool;
 
 import java.util.HashMap;
 
@@ -18,6 +20,8 @@ public class SetmealServiceImpl implements SetmealService {
 
     @Autowired
     private SetmealDao setmealDao;
+    @Autowired
+    private JedisPool jedisPool;
 
     private void SetCheckGroupAndSetMeal(Integer SetmealId,Integer[] checkGroupIds) {
         for (Integer checkGroupId : checkGroupIds) {
@@ -34,6 +38,7 @@ public class SetmealServiceImpl implements SetmealService {
         if (checkGroupIds != null && checkGroupIds.length > 0) {
             SetCheckGroupAndSetMeal(setmeal.getId(),checkGroupIds);
         }
+        jedisPool.getResource().sadd(RedisConstant.SETMEAL_PIC_DB_RESOURCES, setmeal.getImg());
     }
 
     @Override

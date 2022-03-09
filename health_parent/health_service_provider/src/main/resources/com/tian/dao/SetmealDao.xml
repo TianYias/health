@@ -19,7 +19,7 @@
     </insert>
 
     <!--分页查询-->
-    <select id="findPage" parameterType="string" resultType="com.tian.pojo.CheckGroup">
+    <select id="findPage" parameterType="string" resultType="com.tian.pojo.Setmeal">
         select * from t_setmeal
         <if test="value != null and value.length > 0">
             where `code` = #{value} or `name` = #{value} or `helpCode` = #{value}
